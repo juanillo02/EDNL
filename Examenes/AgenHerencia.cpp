@@ -46,11 +46,8 @@ void riqueza(Agen<double>& A, Agen<double>::nodo n)
         int numero = Herederos(A, n);
         if(numero > 0)
         {
-            double total = A.elemento(n);
-            double cantidad_entera = static_cast<int>(total / numero);
-            double resto = total - cantidad_entera * numero;
+            double total = A.elemento(n), cantidad_entera = static_cast<int>(total / numero);
             A.elemento(n) = 0; // padre reparte toda su riqueza
-
             Agen<double>::nodo aux = A.hijoIzqdo(n);
             while(aux != Agen<double>::NODO_NULO)
             {
@@ -61,24 +58,15 @@ void riqueza(Agen<double>& A, Agen<double>::nodo n)
                 }
                 aux = A.hermDrcho(aux);
             }
-
-            // resto queda en erario público (no asignado)
-        }
-        else
-        {
-            // No hay herederos, el nodo se queda con su riqueza
-            // No hacer nada para conservarla
         }
     }
 }
+
 void mostrarRiqueza(const Agen<double>& A, typename Agen<double>::nodo n, int nivel = 0) {
     if (n == Agen<double>::NODO_NULO) return;
-
     // Indentamos para mostrar niveles
     //for (int i = 0; i < nivel; i++) cout << "  ";
-
     cout << "Nodo nivel " << nivel << ", riqueza: " << A.elemento(n) << "\n";
-
     // Recorremos hijos (primero hijo izquierdo, luego hermanos derechos)
     mostrarRiqueza(A, A.hijoIzqdo(n), nivel + 1);
     mostrarRiqueza(A, A.hermDrcho(n), nivel);

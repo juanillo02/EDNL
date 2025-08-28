@@ -38,18 +38,16 @@ int NostalgicosRec(Abin<tElto>& A, Abin<tElto>::nodo n)
     {
         return 0;
     }
-    int cuenta = 0;
     int anc = ancestros(A, n);
     int suc = sucesores(A, n);
-
     if(anc > suc) {
-        cout << "Nodo nostálgico: " << A.elemento(n) 
-             << " (Ancestros: " << anc-1 << ", Sucesores: " << suc - 1 << ")" << endl;
-        cuenta = 1;
+        cout << "Nodo nostálgico: " << A.elemento(n) << " (Ancestros: " << anc-1 << ", Sucesores: " << suc - 1 << ")" << endl;
+        return 1 + NostalgicosRec(A, A.hijoIzqdo(n)) + NostalgicosRec(A, A.hijoDrcho(n));
     }
-    cuenta += NostalgicosRec(A, A.hijoIzqdo(n));
-    cuenta += NostalgicosRec(A, A.hijoDrcho(n));
-    return cuenta;
+    else
+    {
+        return NostalgicosRec(A, A.hijoIzqdo(n)) + NostalgicosRec(A, A.hijoDrcho(n));
+    }
 }
 
 int Nostalgico(Abin<tElto>& A)

@@ -60,8 +60,7 @@ decision Zuelandia(const GrafoP<int>& G, vertice capital, const matriz<int>& via
     matriz<vertice> MVA(n);
     matriz<tCoste> MCA = Floyd(GSC, MVA);
     vector<vertice> VV(n), VVI(n);
-    vector<tCoste> VD = Dijkstra(G, capital, VV);
-    vector<tCoste> VDI = DijkstraInv(G, capital, VVI);
+    vector<tCoste> VD = Dijkstra(G, capital, VV), VDI = DijkstraInv(G, capital, VVI);
     for(vertice i = 0; i < n; i++)
     {
         MCA[i][capital] = VDI[i];

@@ -6,9 +6,6 @@
 using namespace std;
 typedef size_t tElto;
 
-using namespace std;
-typedef float tElto;
-
 float descendientesPropios(Agen<tElto>& A, Agen<tElto>::nodo n)
 {
     if(n == Agen<tElto>::NODO_NULO)

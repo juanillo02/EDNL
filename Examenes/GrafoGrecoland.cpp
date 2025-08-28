@@ -1,13 +1,13 @@
 /*
-El archipiélago de Grecoland está formado únicamente por dos islas, Fobos y Demos, 
-que tienen N1 y N2 coordenadaes, respectivamente, de las cuales C1 y C2 son costeras (Obviamente C1 <= N1 y C2 <= N2).
-Nos planteamos la construcción de un puente entre las posibles coordenadaes costeras, cuyo coste directo de viajar por él,
-al igual que en el caso de las carreteras, coincidirá con su distancia euclídea.
-Se asume que se realizarán exactamente el mismo número de viajes entre cualesquiera coordenadaes del archipiélago. 
-Por ejemplo, se considerará que el número de viajes entre la coordenada P de Fobos y la Q de Deimos será el mismo que entre las coordenadaes R y S de la misma isla. 
+El archipiélago de Grecoland está formado únicamente por dos islas, Fobos y Demos, que tienen N1 y N2 ciudades, respectivamente, de las cuales
+C1 y C2 son costeras (Obviamente C1 <= N1 y C2 <= N2).
+Nos planteamos la construcción de un puente entre las posibles ciudades costeras, cuyo coste directo de viajar por él, al igual que en el caso
+de las carreteras, coincidirá con su distancia euclídea.
+Se asume que se realizarán exactamente el mismo número de viajes entre cualesquiera ciudades del archipiélago. 
+Por ejemplo, se considerará que el número de viajes entre la coordenada P de Fobos y la Q de Deimos será el mismo que entre las ciudades R y S de la misma isla. 
 Dicho de otra forma, todos los posibles trayectos a realizar dentro del archipiélago son igual de importantes.
-Dada la matriz de adyacencia del archipiélago, las coordenadas cartesianas de cada coordenada y la lista de coordenadaes costeras de Fobos y Deimos, 
-implementa una función que calcule que dos coordenadaes unirán el puente.
+Dada la matriz de adyacencia del archipiélago, las coordenadas cartesianas de cada ciudad y la lista de ciudades costeras de Fobos y Deimos, 
+implementa una función que calcule que dos ciudades unirán el puente.
 */
 #include <iostream>
 #include "../Grafos/alg_grafoPMC.h"
@@ -57,7 +57,36 @@ puente mejorpuente(std::vector<coordenada> cf, std::vector<coordenada> cd)
     return p;
 }
 
-puente Grecoland(GrafoP<double>& G, std::vector<coordenada> coordenadaes, std::vector<coordenada> costerasF, std::vector<coordenada> costerasD)
+/*
+puente mejorpuente(std::vector<coordenada> coords, std::vector<bool> costeras, int N1, int N2)
+{
+    puente p;
+    p.coste = GrafoP<double>::INFINITO;
+    double aux;
+    for(int i = 0; i < N1; i++)
+    {
+        if(costeras[i])
+        {
+            for(int j = N1; j < N1+N2; j++)
+            {
+                if(costeras[j])
+                {
+                   aux = distanciaeuclidea(coords[i], coords[j]);
+                   if(aux < p.coste)
+                   {
+                        p.coste = aux;
+                        p.c1 = coords[i];
+                        p.c2 = coords[j];
+                   }
+                }
+            }
+        }  
+    }
+    return p;
+}
+*/
+
+puente Grecoland(Grafo<bool>& G, std::vector<coordenada> ciudades, std::vector<coordenada> costerasF, std::vector<coordenada> costerasD)
 {
     size_t n = G.numVert();
     GrafoP<double> Grecoland(n);
@@ -67,19 +96,23 @@ puente Grecoland(GrafoP<double>& G, std::vector<coordenada> coordenadaes, std::v
         {
             if(G[i][j])
             {
-                Grecoland[i][j] = distancia(coordenadaes[i], coordenadaes[j]);
+                Grecoland[i][j] = distancia(ciudades[i], ciudades[j]);
+            }
+            else
+            {
+                Grecoland[i][j] = GrafoP<double>::INFINITO;
             }
         }
     }
     puente p = mejorpuente(costerasF, costerasD);
     vertice v1, v2;
-    for(size_t i = 0; i < coordenadaes.size(); i ++)
+    for(size_t i = 0; i < ciudades.size(); i ++)
     {
-        if(coordenadaes[i].x == p.c1.x && coordenadaes[i].y == p.c1.y)
+        if(ciudades[i].x == p.c1.x && ciudades[i].y == p.c1.y)
         {
             v1 = i;
         }
-        if(coordenadaes[i].x == p.c2.x && coordenadaes[i].y == p.c2.y)
+        if(ciudades[i].x == p.c2.x && ciudades[i].y == p.c2.y)
         {
             v2 = i;
         }

@@ -52,38 +52,27 @@ int Descendientes(Abin<tElto>& A)
 int main()
 {
     Abin<tElto> A;
-
     A.insertarRaiz('A'); // nivel 0
-
     // Nivel 1
     A.insertarHijoIzqdo(A.raiz(), 'B');
     A.insertarHijoDrcho(A.raiz(), 'C');
-
     // Nivel 2
     A.insertarHijoIzqdo(A.hijoIzqdo(A.raiz()), 'D');
     A.insertarHijoDrcho(A.hijoIzqdo(A.raiz()), 'E');
-
     A.insertarHijoIzqdo(A.hijoDrcho(A.raiz()), 'F');
     A.insertarHijoDrcho(A.hijoDrcho(A.raiz()), 'G');
-
     // Nivel 3
     A.insertarHijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.raiz())), 'H');
     A.insertarHijoDrcho(A.hijoIzqdo(A.hijoIzqdo(A.raiz())), 'I');
-
     A.insertarHijoIzqdo(A.hijoDrcho(A.hijoIzqdo(A.raiz())), 'J');
-
     // Nivel 4 - Vamos a hacer que 'D' tenga 4 descendientes (5 nodos en su subárbol)
     A.insertarHijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.raiz()))), 'K');
     A.insertarHijoDrcho(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.raiz()))), 'L');
-
     // Nivel 5
     A.insertarHijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.raiz())))), 'M');
-
     // Nivel 6 (profundidad máxima)
     A.insertarHijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.hijoIzqdo(A.raiz()))))), 'N');
-
     int resultado = Descendientes(A);
     std::cout << "Número de nodos con exactamente 4 descendientes: " << resultado << std::endl;
-
     return 0;
 }

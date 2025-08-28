@@ -36,76 +36,27 @@ struct coordenada
 
 tCoste distancias(coordenada c1, coordenada c2)
 {
-    return std::sqrt(std::pow(abs(c1.x - c2.x), 2) + std::pow(abs(c1.y - c2.y), 2));
+    return std::sqrt(std::pow(c1.x - c2.x, 2) + std::pow(c1.y - c2.y, 2));
 }
 
-vertice buscarcoordenada(coordenada c, std::vector<coordenada> coordenadaes)
-{
-    for(size_t i = 0; i < coordenadaes.size(); i++)
-    {
-        if(c.x == coordenadaes[i].x && c.y == coordenadaes[i].y)
-        {
-            return i;
-        }
-    }
-    return -1;
-}
-
-double Grecoland(std::vector<coordenada>& coordenadasF, std::vector<coordenada>& coordenadasD, std::vector<coordenada>& coordenadasE, std::vector<coordenada>& costerasF, std::vector<coordenada>& costerasD, std::vector<coordenada>& costerasE, coordenada origen, coordenada destino)
+double Grecoland(std::vector<coordenada>& coordenadasF, std::vector<coordenada>& coordenadasD, std::vector<coordenada>& coordenadasE, std::vector<coordenada>& costerasF, std::vector<coordenada>& costerasD, std::vector<coordenada>& costerasE, vertice origen, vertice destino)
 {
     
     size_t nf = coordenadasF.size(), nd = coordenadasD.size(), ne = coordenadasE.size();
     GrafoP<double> G(nf+nd+ne);
-    double puente = 0;
-    for(vertice i = 0; i < costerasF.size(); i++)
-    {
-        vertice cf = buscarcoordenada(costerasF[i], coordenadasF);
-        for(vertice j = 0; j < costerasD.size(); j++)
-        {
-            vertice cd = buscarcoordenada(costerasD[j], coordenadasD);
-            double distancia = distancias(costerasF[i], costerasD[j]);
-            G[cf][cd] = G[cd][cf] = distancia;
-            if(distancia > puente)
-            {
-                puente = distancia;
-            }
-        }
-    }
-    for(vertice i = 0; i < costerasF.size(); i++)
-    {
-        vertice cf = buscarcoordenada(costerasF[i], coordenadasF);
-        for(vertice j = 0; j < costerasE.size(); j++)
-        {
-            vertice ce = buscarcoordenada(costerasE[j], coordenadasE);
-            double distancia = distancias(costerasF[i], costerasE[j]);
-            G[cf][ce] = G[ce][cf] = distancia;
-            if(distancia > puente)
-            {
-                puente = distancia;
-            }
-        }
-    }
-    for(vertice i = 0; i < costerasD.size(); i++)
-    {
-        vertice cd = buscarcoordenada(costerasD[i], coordenadasD);
-        for(vertice j = 0; j < costerasE.size(); j++)
-        {
-            vertice ce = buscarcoordenada(costerasE[j], coordenadasE);
-            double distancia = distancias(costerasD[i], costerasE[j]);
-            G[cd][ce] = G[ce][cd] = distancia;
-            if(distancia > puente)
-            {
-                puente = distancia;
-            }
-        }
-    }
+    tCoste coste, min = GrafoP<double>::INFINITO;
     for(vertice i = 0; i < nf; i++)
     {
         for(vertice j = 0; j < nf; j++)
         {
             if(i != j)
             {
-                G[i][j] = G[j][i] = distancias(coordenadasF[i], coordenadasF[j]) + puente;
+                coste = distancias(coordenadasF[i], coordenadasF[j]);
+                if(coste < min)
+                {
+                    min = coste;
+                }
+                G[i][j] = G[j][i] = coste;
             }
         }
     }
@@ -115,7 +66,12 @@ double Grecoland(std::vector<coordenada>& coordenadasF, std::vector<coordenada>&
         {
             if(i != j)
             {
-                G[i][j] = G[j][i] = distancias(coordenadasD[i], coordenadasD[j]) + puente;
+                coste = distancias(coordenadasD[i], coordenadasD[j]);
+                if(coste < min)
+                {
+                    min = coste;
+                }
+                G[i][j] = G[j][i] = coste;
             }
         }
     }
@@ -125,36 +81,67 @@ double Grecoland(std::vector<coordenada>& coordenadasF, std::vector<coordenada>&
         {
             if(i != j)
             {
-                G[i][j] = G[j][i] = distancias(coordenadasE[i], coordenadasE[j]) + puente;
+                coste = distancias(coordenadasE[i], coordenadasE[j]);
+                if(coste < min)
+                {
+                    min = coste;
+                }
+                G[i][j] = G[j][i] = coste;
             }
         }
     }
-    for(vertice i = 0; i < G.numVert(); i++)
+    for(vertice i = 0; i < nf; i++)
     {
-        G[i][i] = 0;
+        for(vertice j = 0; j < nd; j++)
+        {
+            for(size_t k = 0; k < costerasF.size(); k++)
+            {
+                for(size_t l = 0; l < costerasD.size(); l++)
+                {
+                    if(coordenadasF[i].x == costerasF[k].x && coordenadasF[i].y == costerasF[k].y && coordenadasD[j].x == costerasD[l].x && coordenadasD[j].y == costerasD[l].y)
+                    {
+                        G[i][j+nf] = std::min(distancias(coordenadasF[i], coordenadasD[j]), min);
+                    }
+                }
+            }
+        }
+    }
+    for(vertice i = 0; i < nf+nd; i++)
+    {
+        for(vertice j = nf+nd; j < nf+nd+ne; j++)
+        {
+            for(size_t k = 0; k < costerasD.size(); k++)
+            {
+                for(size_t l = 0; l < costerasE.size(); l++)
+                {
+                    if(coordenadasD[i-nf].x == costerasD[k].x && coordenadasD[i-nf].y == costerasD[k].y && coordenadasE[j-nf-nd].x == costerasE[l].x && coordenadasE[j-nf-nd].y == costerasE[l].y)
+                    {
+                        G[i+nf][j+nf+nd] = std::min(distancias(coordenadasD[i-nf], coordenadasE[j-nf-nd]), min);
+                    }
+                }
+            }
+        }
+    }
+    for(vertice i = 0; i < nf; i++)
+    {
+        for(vertice j = nf+nd; j < nf+nd+ne; j++)
+        {
+            for(size_t k = 0; k < costerasF.size(); k++)
+            {
+                for(size_t l = 0; l < costerasE.size(); l++)
+                {
+                    if(coordenadasF[i].x == costerasF[k].x && coordenadasF[i].y == costerasF[k].y && coordenadasE[j-nf-nd].x == costerasE[l].x && coordenadasE[j-nf-nd].y == costerasE[l].y)
+                    {
+                        G[i][j+nf+nd] = std::min(distancias(coordenadasF[i], coordenadasE[j-nf-nd]), min);
+                    }
+                }
+            }
+        }
     }
     GrafoP<double> GK = Kruskall(G);
-    vertice o = buscarcoordenada(origen, coordenadasF);
-    if(o == -1)
-    {
-        o = buscarcoordenada(origen, coordenadasD);
-    }
-    if(o == -1)
-    {
-        o = buscarcoordenada(origen, coordenadasE);
-    }
-    vertice d = buscarcoordenada(destino, coordenadasF);
-    if(d == -1)
-    {
-        d = buscarcoordenada(destino, coordenadasD);
-    }
-    if(d == -1)
-    {
-        d = buscarcoordenada(destino, coordenadasE);
-    }
     vector<vertice> VV(G.numVert());
-    vector<double> VD = Dijkstra(GK, o, VV);
-    return VD[d];
+    vector<double> VD = Dijkstra(GK, origen, VV);
+    return VD[destino];
 }
 
 int main() {

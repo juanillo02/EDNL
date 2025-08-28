@@ -39,13 +39,10 @@ void eliminarRec(Abin<tElto>& A, Abin<tElto>::nodo n)
 {
     if (n != Abin<tElto>::NODO_NULO)
     {
-        Abin<tElto>::nodo hi = A.hijoIzqdo(n);
-        Abin<tElto>::nodo hd = A.hijoDrcho(n);
-
+        Abin<tElto>::nodo hi = A.hijoIzqdo(n), hd = A.hijoDrcho(n);
         // Recorremos primero los hijos
         eliminarRec(A, hi);
         eliminarRec(A, hd);
-
         // Si tiene solo un hijo, eliminar su único hijo y toda su descendencia
         if ((hi == Abin<tElto>::NODO_NULO && hd != Abin<tElto>::NODO_NULO))
         {

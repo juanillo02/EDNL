@@ -1,3 +1,4 @@
+/*EsAvl -> Recibe un arbol binario, y devuelve true si es un Arbol Binario de Busqueda Equilibrado (AVL) o false si no*/
 #include <iostream>
 #include <cmath>
 #include <limits>
@@ -61,16 +62,12 @@ int main() {
     A1.insertarHijoDrcho(A1.hijoIzqdo(A1.raiz()), 'H');
     A1.insertarHijoIzqdo(A1.hijoDrcho(A1.raiz()), 'P');
     A1.insertarHijoDrcho(A1.hijoDrcho(A1.raiz()), 'X');
-
     std::cout << "¿A1 es un AVL? " << (EsAVL(A1) ? "Sí" : "No") << std::endl; // Esperado: Sí
-
     Abin<tElto> A2;
     A2.insertarRaiz('M');
     A2.insertarHijoIzqdo(A2.raiz(), 'F');
     A2.insertarHijoIzqdo(A2.hijoIzqdo(A2.raiz()), 'C');
     A2.insertarHijoIzqdo(A2.hijoIzqdo(A2.hijoIzqdo(A2.raiz())), 'A');
-
     std::cout << "¿A2 es un AVL? " << (EsAVL(A2) ? "Sí" : "No") << std::endl; // Esperado: No
-
     return 0;
 }

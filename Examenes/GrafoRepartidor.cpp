@@ -51,7 +51,6 @@ vertice siguiente(const matriz<tCoste>& MC, vertice actual, const std::vector<in
 {
     tCoste minDistancia = GrafoP<int>::INFINITO;
     vertice siguienteCliente = actual;
-
     for(size_t i = 0; i < falta.size(); i++)
     {
         if(falta[i] > 0)
@@ -91,7 +90,7 @@ tCoste distribuidor(GrafoP<int>& G, int capacidad, vertice origen)
         }
         else
         {
-            if(CapActual >= falta[actual])
+            if(CapActual > falta[actual])
             {
                 CapActual -= falta[actual];
                 falta[actual] = 0;
@@ -114,8 +113,10 @@ tCoste distribuidor(GrafoP<int>& G, int capacidad, vertice origen)
             }
         }
     }
-    // Si terminó el día en un cliente, puede (opcionalmente) regresar al origen
-    distancia += MC[actual][origen];
+    if(actual != origen)
+    {   // Si termino el día en un cliente, puede (opcionalmente) regresar al origen
+        distancia += MC[actual][origen];
+    }
     return distancia;
 }
 

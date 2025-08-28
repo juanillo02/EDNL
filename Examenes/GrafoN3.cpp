@@ -62,15 +62,14 @@ tCoste laberinto(size_t N, std::vector<casilla>& piedra, casilla entrada, casill
     {
         for(vertice j = 0; j < n; j++)
         {
-            if(adyacentes(nodocasilla(i, N), nodocasilla(j, N)))
+            if(adyacentes(nodocasilla(i, N), nodocasilla(j, N)) && G[i][j] != GrafoP<int>::INFINITO)
             {
                 G[i][j] = 1;
-                G[j][i] = 1;
             }
         }
     }
     vector<vertice> VV(n);
-    vector<tCoste> VC = Dijkstra(G, casillanodo(entrada, n), VV);
+    vector<tCoste> VC = Dijkstra(G, casillanodo(entrada, N), VV);
     return VC[casillanodo(salida, N)];
 }
 
